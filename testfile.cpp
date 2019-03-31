@@ -2,15 +2,15 @@
 using namespace std;
 int main()
 {
-int a=10;
-int b=20;
-for(int i=0;i<10;i++)
+            int a=10;
+    int b=20;
+  for(int i=0;i<10;i++)
+  {
+                for(int j=0;j<i;j++)
 {
-for(int j=0;j<i;j++)
-{
-cout<<"* ";
+                            cout<<"* ";
 }
-cout<<endl;
+        cout<<endl;
 }
 return 0;
 }
