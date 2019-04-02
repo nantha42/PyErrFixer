@@ -19,6 +19,10 @@ def saveFile():
 
 def saveAs():
     f = asksaveasfile(mode="w",defaultextension='.txt')
+    print(f.name)
+    global filename
+    filename = f.name.split('/')[-1]
+
     t = text.get(0.0,END)
     try:
         f.write(t.rstrip())
@@ -34,17 +38,52 @@ def openFile():
 def indent():
     lines = text.get(0.0,END)
     p = Process()
+    t = p.getreport()
     lines= p.send_string(lines)
+
     text.delete(0.0,END)
     text.insert(0.0,lines)
 
-root = Tk();
-root.title("Text Editor")
-root.minsize(width=400,height=400)
-root.maxsize(width=400,height=400)
+def run():
 
-text = Text(root, width=400, height=400)
-text.pack()
+    str = entry.get()
+    items = str.split('/')
+    str = str[:-3]
+    path = "/"
+    for i in range(len(items)-1):
+        path+= items[i]+'/'
+    sys.path.insert(0,path)
+    print(str)
+    p = Process(items[-1][:-3],path)
+    print(p.getreport())
+    text.delete(0.0,END)
+    text.insert(0.0,p.getreport())
+
+def callprocess():
+
+    print("called")
+    print(str)
+
+
+root = Tk()
+root.title("Indent Corrector")
+root.minsize(width=300,height=300)
+root.minsize(width=300,height=300)
+
+"""
+editor = Frame(root,width=600,height=500)
+editor.place(x=0,y=0)
+console = Frame(root,width=600,height=200)
+console.place(x=0,y=530)
+
+text = Text(editor)
+text.place(x=0,y=0,width=600,height=500)
+labelo = Label(text="output:");
+labelo.place(x=0,y=500)
+
+output = Text(console)
+output.place(x=0,y=0,width=600,height=150)
+"""
 
 menubar = Menu(root)
 filemenu = Menu(menubar)
@@ -58,9 +97,26 @@ filemenu.add_command(label="QUit",command=root.quit)
 editmenu = Menu(menubar)
 editmenu.add_command(label="Indent",command=indent)
 
+runmenu = Menu(menubar)
+runmenu.add_command(label="Run",command=run)
 
 menubar.add_cascade(label="File",menu=filemenu)
 menubar.add_cascade(label="Edit",menu=editmenu)
+menubar.add_cascade(label="Run",menu=runmenu)
 
+
+editor = Frame(root,width=300,height=200)
+editor.grid(row=2,column=1)
+text = Text(editor)
+text.place(x=0,y=0,width=300,height=200)
+#labelo = Label(text="output:");
+#labelo.place(x=0,y=500)
+
+label = Label(root,text="Filepath")
+label.grid(row= 1,column=1)
+entry = Entry(root)
+entry.grid(row=1,column=2)
+
+#entry.bind('<Return>',callprocess)
 root.config(menu=menubar)
 root.mainloop()
